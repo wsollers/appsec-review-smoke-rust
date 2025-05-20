@@ -1,0 +1,3 @@
+Rename cache.rs to session.rs
+
+The module holds the Session type; the name should say so.

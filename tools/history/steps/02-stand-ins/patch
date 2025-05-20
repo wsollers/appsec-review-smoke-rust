@@ -1,0 +1,147 @@
+diff --git a/.cargo/config.toml b/.cargo/config.toml
+new file mode 100644
+index 0000000..1ace219
+--- /dev/null
++++ b/.cargo/config.toml
+@@ -0,0 +1,5 @@
++[source.crates-io]
++replace-with = "vendored"
++
++[source.vendored]
++directory = "vendor"
+diff --git a/vendor/reqwest/.cargo-checksum.json b/vendor/reqwest/.cargo-checksum.json
+new file mode 100644
+index 0000000..2ebe51c
+--- /dev/null
++++ b/vendor/reqwest/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":null}
+diff --git a/vendor/reqwest/Cargo.toml b/vendor/reqwest/Cargo.toml
+new file mode 100644
+index 0000000..fdfd4f4
+--- /dev/null
++++ b/vendor/reqwest/Cargo.toml
+@@ -0,0 +1,8 @@
++[package]
++name = "reqwest"
++version = "0.0.0"
++edition = "2021"
++publish = false
++
++[lib]
++path = "src/lib.rs"
+diff --git a/vendor/reqwest/src/lib.rs b/vendor/reqwest/src/lib.rs
+new file mode 100644
+index 0000000..1179d3b
+--- /dev/null
++++ b/vendor/reqwest/src/lib.rs
+@@ -0,0 +1,37 @@
++//! Offline stand-in for the reqwest blocking API surface the fixture uses.
++pub mod blocking {
++    pub mod client {
++        pub struct Client;
++
++        pub struct RequestBuilder;
++
++        impl Client {
++            pub fn new() -> Client {
++                Client
++            }
++
++            pub fn request(&self, method: &str, url: &str) -> RequestBuilder {
++                let _ = (method, url);
++                RequestBuilder
++            }
++        }
++    }
++
++    pub mod response {
++        pub struct Response;
++
++        impl Response {
++            pub fn text(&self) -> Result<&'static str, ()> {
++                Ok("")
++            }
++        }
++    }
++
++    pub use client::Client;
++    pub use response::Response;
++
++    pub fn get(url: &str) -> Result<Response, ()> {
++        let _ = url;
++        Ok(Response)
++    }
++}
+diff --git a/vendor/rusqlite/.cargo-checksum.json b/vendor/rusqlite/.cargo-checksum.json
+new file mode 100644
+index 0000000..2ebe51c
+--- /dev/null
++++ b/vendor/rusqlite/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":null}
+diff --git a/vendor/rusqlite/Cargo.toml b/vendor/rusqlite/Cargo.toml
+new file mode 100644
+index 0000000..912e2e1
+--- /dev/null
++++ b/vendor/rusqlite/Cargo.toml
+@@ -0,0 +1,8 @@
++[package]
++name = "rusqlite"
++version = "0.0.0"
++edition = "2021"
++publish = false
++
++[lib]
++path = "src/lib.rs"
+diff --git a/vendor/rusqlite/src/lib.rs b/vendor/rusqlite/src/lib.rs
+new file mode 100644
+index 0000000..66cd44a
+--- /dev/null
++++ b/vendor/rusqlite/src/lib.rs
+@@ -0,0 +1,13 @@
++//! Offline stand-in for the rusqlite API surface the fixture uses (models: <rusqlite::Connection>::execute).
++pub struct Connection;
++
++impl Connection {
++    pub fn open_in_memory() -> Result<Connection, ()> {
++        Ok(Connection)
++    }
++
++    pub fn execute<P>(&self, sql: &str, params: P) -> usize {
++        let _ = (sql, params);
++        0
++    }
++}
+diff --git a/vendor/serde_json/.cargo-checksum.json b/vendor/serde_json/.cargo-checksum.json
+new file mode 100644
+index 0000000..2ebe51c
+--- /dev/null
++++ b/vendor/serde_json/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":null}
+diff --git a/vendor/serde_json/Cargo.toml b/vendor/serde_json/Cargo.toml
+new file mode 100644
+index 0000000..68ff16f
+--- /dev/null
++++ b/vendor/serde_json/Cargo.toml
+@@ -0,0 +1,8 @@
++[package]
++name = "serde_json"
++version = "0.0.0"
++edition = "2021"
++publish = false
++
++[lib]
++path = "src/lib.rs"
+diff --git a/vendor/serde_json/src/lib.rs b/vendor/serde_json/src/lib.rs
+new file mode 100644
+index 0000000..8f97df1
+--- /dev/null
++++ b/vendor/serde_json/src/lib.rs
+@@ -0,0 +1,5 @@
++//! Offline stand-in for serde_json::from_str (catalog API sink rust.sink.api.from_str).
++pub fn from_str(s: &str) -> usize {
++    let _ = s;
++    0
++}

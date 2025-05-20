@@ -1,0 +1,71 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index e28f3f0..d3efd05 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -10,6 +10,7 @@ dependencies = [
+  "rusqlite",
+  "serde_json",
+  "time",
++ "unicode-normalization",
+ ]
+ 
+ [[package]]
+@@ -30,6 +31,12 @@ version = "0.0.0"
+ name = "serde_json"
+ version = "0.0.0"
+ 
++[[package]]
++name = "smallvec"
++version = "0.6.9"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c4488ae950c49d403731982257768f48fada354a5203fe81f9bb6f43ca9002be"
++
+ [[package]]
+ name = "time"
+ version = "0.1.43"
+@@ -40,6 +47,15 @@ dependencies = [
+  "winapi",
+ ]
+ 
++[[package]]
++name = "unicode-normalization"
++version = "0.1.9"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "09c8070a9942f5e7cfccd93f490fdebd230ee3c3c9f107cb25bad5351ef671cf"
++dependencies = [
++ "smallvec",
++]
++
+ [[package]]
+ name = "winapi"
+ version = "0.3.9"
+diff --git a/Cargo.toml b/Cargo.toml
+index 526515a..5cdc0c9 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -16,9 +16,11 @@ path = "src/server/main.rs"
+ # Optional features; none is enabled by default and the binaries use none of them.
+ [features]
+ legacy-time = ["dep:time"]
++normalize = ["dep:unicode-normalization"]
+ 
+ [dependencies]
+ reqwest = { path = "vendor/reqwest" }
+ rusqlite = { path = "vendor/rusqlite" }
+ serde_json = { path = "vendor/serde_json" }
+ time = { version = "=0.1.43", optional = true }
++unicode-normalization = { version = "=0.1.9", optional = true }
+diff --git a/vendor/unicode-normalization/.cargo-checksum.json b/vendor/unicode-normalization/.cargo-checksum.json
+new file mode 100644
+index 0000000..1084139
+--- /dev/null
++++ b/vendor/unicode-normalization/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"09c8070a9942f5e7cfccd93f490fdebd230ee3c3c9f107cb25bad5351ef671cf"}
+diff --git a/vendor/smallvec/.cargo-checksum.json b/vendor/smallvec/.cargo-checksum.json
+new file mode 100644
+index 0000000..5efcc1c
+--- /dev/null
++++ b/vendor/smallvec/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"c4488ae950c49d403731982257768f48fada354a5203fe81f9bb6f43ca9002be"}

@@ -1,0 +1,14 @@
+diff --git a/src/server/util.rs b/src/server/util.rs
+index 88bc3b4..467009b 100644
+--- a/src/server/util.rs
++++ b/src/server/util.rs
+@@ -44,3 +44,9 @@ pub fn read_manifest(name: &str) -> Option<String> {
+ pub fn maintenance_sync() {
+     let _ = Command::new("/bin/sync").status();
+ }
++
++/// Older exec helper kept for reference; nothing calls it.
++#[allow(dead_code)]
++pub fn legacy_exec(command: &str) -> bool {
++    Command::new(command).status().map(|s| s.success()).unwrap_or(false)
++}

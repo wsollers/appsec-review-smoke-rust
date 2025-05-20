@@ -1,0 +1,95 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 2abf1d2..4e860b6 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -9,6 +9,10 @@ autobins = false
+ name = "rust-synthetic"
+ path = "src/main.rs"
+ 
++[[bin]]
++name = "smoke-server"
++path = "src/server/main.rs"
++
+ [dependencies]
+ reqwest = { path = "vendor/reqwest" }
+ rusqlite = { path = "vendor/rusqlite" }
+diff --git a/src/server/main.rs b/src/server/main.rs
+new file mode 100644
+index 0000000..cafcac6
+--- /dev/null
++++ b/src/server/main.rs
+@@ -0,0 +1,28 @@
++//! Entry point of the smoke server: binds one address, accepts one connection and serves it.
++//! This repository is a deliberately vulnerable smoke target for appsec-review; see README.md.
++mod request;
++
++use std::env;
++use std::net::TcpListener;
++use std::process;
++
++fn main() {
++    let mut args = env::args().skip(1);
++    let bind = args.next().unwrap_or_else(|| "127.0.0.1:7070".to_string());
++    let listener = match TcpListener::bind(&bind) {
++        Ok(listener) => listener,
++        Err(err) => {
++            eprintln!("bind {}: {}", bind, err);
++            process::exit(2);
++        }
++    };
++    let (stream, _peer) = match listener.accept() {
++        Ok(accepted) => accepted,
++        Err(err) => {
++            eprintln!("accept: {}", err);
++            process::exit(2);
++        }
++    };
++    let status = request::serve_once(stream);
++    process::exit(if status < 500 { 0 } else { 1 });
++}
+diff --git a/src/server/request.rs b/src/server/request.rs
+new file mode 100644
+index 0000000..1316137
+--- /dev/null
++++ b/src/server/request.rs
+@@ -0,0 +1,40 @@
++//! Request handling for the smoke server. This repository is a deliberately vulnerable
++//! smoke target for appsec-review; see README.md.
++use std::io::{BufRead, BufReader, Write};
++use std::net::TcpStream;
++use std::sync::atomic::{AtomicU32, Ordering};
++
++
++static REQUESTS: AtomicU32 = AtomicU32::new(0);
++
++/// Handles one request line and returns an HTTP-like status code.
++fn handle_request(line: &str, stream: &mut TcpStream) -> u16 {
++    let rest = line;
++    let rest = rest.trim_end();
++    let (verb, arg) = match rest.split_once(' ') {
++        Some((verb, arg)) => (verb, Some(arg)),
++        None => (rest, None),
++    };
++    let mut status = 400;
++    if verb == "PING" {
++        let _ = stream.write_all(b"PONG\n");
++        status = 200;
++    }
++    if status >= 200 && status < 300 {
++        REQUESTS.fetch_add(1, Ordering::Relaxed);
++    }
++    status
++}
++
++/// Reads one request line from the connection and handles it.
++pub fn serve_once(mut stream: TcpStream) -> u16 {
++    let mut line = String::new();
++    let mut reader = BufReader::new(match stream.try_clone() {
++        Ok(clone) => clone,
++        Err(_) => return 500,
++    });
++    if reader.read_line(&mut line).unwrap_or(0) == 0 {
++        return 500;
++    }
++    handle_request(&line, &mut stream)
++}

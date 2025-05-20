@@ -1,0 +1,79 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index d3efd05..255a3fe 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -6,6 +6,7 @@ version = 4
+ name = "appsec-review-smoke-rust"
+ version = "0.1.0"
+ dependencies = [
++ "crossbeam-utils",
+  "reqwest",
+  "rusqlite",
+  "serde_json",
+@@ -13,6 +14,28 @@ dependencies = [
+  "unicode-normalization",
+ ]
+ 
++[[package]]
++name = "cfg-if"
++version = "1.0.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
++
++[[package]]
++name = "crossbeam-utils"
++version = "0.8.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "cfcae03edb34f947e64acdb1c33ec169824e20657e9ecb61cef6c8c74dcb8120"
++dependencies = [
++ "cfg-if",
++ "lazy_static",
++]
++
++[[package]]
++name = "lazy_static"
++version = "1.4.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
++
+ [[package]]
+ name = "libc"
+ version = "0.2.155"
+diff --git a/Cargo.toml b/Cargo.toml
+index 5cdc0c9..4310db5 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -17,6 +17,7 @@ path = "src/server/main.rs"
+ [features]
+ legacy-time = ["dep:time"]
+ normalize = ["dep:unicode-normalization"]
++threads = ["dep:crossbeam-utils"]
+ 
+ [dependencies]
+ reqwest = { path = "vendor/reqwest" }
+@@ -24,3 +25,4 @@ rusqlite = { path = "vendor/rusqlite" }
+ serde_json = { path = "vendor/serde_json" }
+ time = { version = "=0.1.43", optional = true }
+ unicode-normalization = { version = "=0.1.9", optional = true }
++crossbeam-utils = { version = "=0.8.6", optional = true }
+diff --git a/vendor/crossbeam-utils/.cargo-checksum.json b/vendor/crossbeam-utils/.cargo-checksum.json
+new file mode 100644
+index 0000000..8af4675
+--- /dev/null
++++ b/vendor/crossbeam-utils/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"cfcae03edb34f947e64acdb1c33ec169824e20657e9ecb61cef6c8c74dcb8120"}
+diff --git a/vendor/cfg-if/.cargo-checksum.json b/vendor/cfg-if/.cargo-checksum.json
+new file mode 100644
+index 0000000..81ae224
+--- /dev/null
++++ b/vendor/cfg-if/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"}
+diff --git a/vendor/lazy_static/.cargo-checksum.json b/vendor/lazy_static/.cargo-checksum.json
+new file mode 100644
+index 0000000..012610d
+--- /dev/null
++++ b/vendor/lazy_static/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"}

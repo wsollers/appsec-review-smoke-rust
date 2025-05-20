@@ -1,0 +1,4 @@
+Let SESSION reserve scratch pages
+
+SESSION reserve N sizes the scratch buffer to N pages up front so later
+arguments do not reallocate.

@@ -1,0 +1,7 @@
+Fix path traversal in read_asset (CWE-22)
+
+The ASSET verb joined the requested name onto the asset root and read the
+result, so "../" components read files outside the asset directory.
+read_asset now canonicalises the joined path with fs::canonicalize and
+refuses any path that does not start with the asset root before reading it;
+the check runs on every path to the read, so a traversal cannot reach it.

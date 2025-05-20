@@ -1,0 +1,8 @@
+Fix command injection in run_maintenance (CWE-78)
+
+The TOOL verb interpolated the tool name from the request into a command line
+and ran it through sh -c, so a name containing shell metacharacters ran
+arbitrary commands as the server user. run_maintenance now matches the name against
+the two tools it supports and answers them directly: there is no command
+string, no Command and no shell, so no request input reaches a command
+interpreter.

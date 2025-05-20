@@ -1,0 +1,45 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 01f9a21..ac755b9 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -9,3 +9,7 @@ All notable changes to this project are documented in this file. The format foll
+ 
+ - Smoke server with PING, TOOL and ASSET verbs.
+ - Vendored time, unicode-normalization, crossbeam-utils and memoffset behind optional features.
++
++### Security
++
++- 2026-02-19: Upgraded memoffset from 0.5.5 to 0.6.2 (RUSTSEC-2023-0045, GHSA-wfg4-322g-9vqv; `offset_of!` could invoke undefined behaviour).
+diff --git a/Cargo.lock b/Cargo.lock
+index 9a0389d..f2cad7f 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -58,9 +58,9 @@ checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
+ 
+ [[package]]
+ name = "memoffset"
+-version = "0.5.5"
++version = "0.6.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c198b026e1bbf08a937e94c6c60f9ec4a2267f5b0d2eec9c1b21b061ce2be55f"
++checksum = "cc14fc54a812b4472b4113facc3e44d099fbc0ea2ce0551fa5c703f8edfbfd38"
+ dependencies = [
+  "autocfg",
+ ]
+diff --git a/Cargo.toml b/Cargo.toml
+index cdedda2..872509a 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -28,4 +28,4 @@ log = "=0.4.22"
+ time = { version = "=0.1.43", optional = true }
+ unicode-normalization = { version = "=0.1.9", optional = true }
+ crossbeam-utils = { version = "=0.8.6", optional = true }
+-memoffset = { version = "=0.5.5", optional = true }
++memoffset = { version = "=0.6.2", optional = true }
+diff --git a/vendor/memoffset/.cargo-checksum.json b/vendor/memoffset/.cargo-checksum.json
+new file mode 100644
+index 0000000..3ce0b7d
+--- /dev/null
++++ b/vendor/memoffset/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"cc14fc54a812b4472b4113facc3e44d099fbc0ea2ce0551fa5c703f8edfbfd38"}

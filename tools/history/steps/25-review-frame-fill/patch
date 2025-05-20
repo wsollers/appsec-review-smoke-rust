@@ -1,0 +1,13 @@
+diff --git a/src/server/util.rs b/src/server/util.rs
+index ab68df3..88bc3b4 100644
+--- a/src/server/util.rs
++++ b/src/server/util.rs
+@@ -19,6 +19,8 @@ impl Frame {
+ }
+ 
+ /// Copies up to one frame of payload; longer payloads are refused.
++/// The length is compared against the destination size on the only path to the copy,
++/// so the copy cannot overrun `data` (reviewed 2026-03; see the commit log).
+ pub fn frame_fill(f: &mut Frame, src: &[u8], n: usize) -> bool {
+     if n < f.data.len() && n <= src.len() {
+         unsafe { ptr::copy_nonoverlapping(src.as_ptr(), f.data.as_mut_ptr(), n) };

@@ -1,0 +1,8 @@
+Upgrade memoffset from 0.5.5 to 0.6.2
+
+memoffset 0.5.5 dereferences an uninitialised value to compute field offsets
+in offset_of!, which is undefined behaviour (RUSTSEC-2023-0045,
+GHSA-wfg4-322g-9vqv). The crate sits behind the offsets feature, so nothing
+we ship runs it today, but the lockfile should not pin an advisory. 0.6.2
+computes offsets through addr_of!; the vendored copy is replaced with the
+published 0.6.2 crate and its checksum.

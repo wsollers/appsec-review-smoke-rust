@@ -1,0 +1,44 @@
+diff --git a/src/server/cache.rs b/src/server/cache.rs
+new file mode 100644
+index 0000000..a8aed30
+--- /dev/null
++++ b/src/server/cache.rs
+@@ -0,0 +1,27 @@
++//! Per-connection session state for the smoke server. Deliberately vulnerable smoke target;
++//! see README.md.
++
++pub struct Session {
++    pub name: String,
++    pub hits: u32,
++    pub scratch: Vec<u8>,
++}
++
++impl Session {
++    /// Opens a session; the name is truncated to 32 bytes.
++    pub fn open(name: &str) -> Session {
++        let mut name = name.to_string();
++        name.truncate(32);
++        Session { name, hits: 0, scratch: Vec::new() }
++    }
++
++    /// Records one use of the session and keeps the argument as scratch data.
++    pub fn touch(&mut self, arg: Option<&str>) -> bool {
++        self.hits += 1;
++        if let Some(text) = arg {
++            self.scratch.clear();
++            self.scratch.extend_from_slice(text.as_bytes());
++        }
++        true
++    }
++}
+diff --git a/src/server/main.rs b/src/server/main.rs
+index d3f4df2..311d293 100644
+--- a/src/server/main.rs
++++ b/src/server/main.rs
+@@ -1,5 +1,6 @@
+ //! Entry point of the smoke server: binds one address, accepts one connection and serves it.
+ //! This repository is a deliberately vulnerable smoke target for appsec-review; see README.md.
++mod cache;
+ mod request;
+ mod util;
+ 

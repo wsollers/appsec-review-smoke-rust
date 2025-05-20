@@ -1,0 +1,3 @@
+https://static.crates.io/crates/crossbeam-utils/crossbeam-utils-0.8.6.crate|cfcae03edb34f947e64acdb1c33ec169824e20657e9ecb61cef6c8c74dcb8120|1|vendor/crossbeam-utils|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$
+https://static.crates.io/crates/cfg-if/cfg-if-1.0.0.crate|baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd|1|vendor/cfg-if|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$
+https://static.crates.io/crates/lazy_static/lazy_static-1.4.0.crate|e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646|1|vendor/lazy_static|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$

@@ -1,0 +1,5 @@
+https://static.crates.io/crates/time/time-0.1.43.crate|ca8a50ef2360fbd1eeb0ecd46795a87a19024eb4b53c5dc916ca1fd95fe62438|1|vendor/time|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$
+https://static.crates.io/crates/libc/libc-0.2.155.crate|97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c|1|vendor/libc|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$
+https://static.crates.io/crates/winapi/winapi-0.3.9.crate|5c839a674fcd7a98952e593242ea400abe93992746761e38641405d28b00f419|1|vendor/winapi|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$
+https://static.crates.io/crates/winapi-i686-pc-windows-gnu/winapi-i686-pc-windows-gnu-0.4.0.crate|ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6|1|vendor/winapi-i686-pc-windows-gnu|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$
+https://static.crates.io/crates/winapi-x86_64-pc-windows-gnu/winapi-x86_64-pc-windows-gnu-0.4.0.crate|712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f|1|vendor/winapi-x86_64-pc-windows-gnu|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$

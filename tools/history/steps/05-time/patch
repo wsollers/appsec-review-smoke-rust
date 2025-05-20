@@ -1,0 +1,108 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 140ac96..e28f3f0 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -9,8 +9,15 @@ dependencies = [
+  "reqwest",
+  "rusqlite",
+  "serde_json",
++ "time",
+ ]
+ 
++[[package]]
++name = "libc"
++version = "0.2.155"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
++
+ [[package]]
+ name = "reqwest"
+ version = "0.0.0"
+@@ -22,3 +29,35 @@ version = "0.0.0"
+ [[package]]
+ name = "serde_json"
+ version = "0.0.0"
++
++[[package]]
++name = "time"
++version = "0.1.43"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ca8a50ef2360fbd1eeb0ecd46795a87a19024eb4b53c5dc916ca1fd95fe62438"
++dependencies = [
++ "libc",
++ "winapi",
++]
++
++[[package]]
++name = "winapi"
++version = "0.3.9"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "5c839a674fcd7a98952e593242ea400abe93992746761e38641405d28b00f419"
++dependencies = [
++ "winapi-i686-pc-windows-gnu",
++ "winapi-x86_64-pc-windows-gnu",
++]
++
++[[package]]
++name = "winapi-i686-pc-windows-gnu"
++version = "0.4.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6"
++
++[[package]]
++name = "winapi-x86_64-pc-windows-gnu"
++version = "0.4.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
+diff --git a/Cargo.toml b/Cargo.toml
+index 4e860b6..526515a 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -13,7 +13,12 @@ path = "src/main.rs"
+ name = "smoke-server"
+ path = "src/server/main.rs"
+ 
++# Optional features; none is enabled by default and the binaries use none of them.
++[features]
++legacy-time = ["dep:time"]
++
+ [dependencies]
+ reqwest = { path = "vendor/reqwest" }
+ rusqlite = { path = "vendor/rusqlite" }
+ serde_json = { path = "vendor/serde_json" }
++time = { version = "=0.1.43", optional = true }
+diff --git a/vendor/time/.cargo-checksum.json b/vendor/time/.cargo-checksum.json
+new file mode 100644
+index 0000000..503fe91
+--- /dev/null
++++ b/vendor/time/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"ca8a50ef2360fbd1eeb0ecd46795a87a19024eb4b53c5dc916ca1fd95fe62438"}
+diff --git a/vendor/libc/.cargo-checksum.json b/vendor/libc/.cargo-checksum.json
+new file mode 100644
+index 0000000..9106ccc
+--- /dev/null
++++ b/vendor/libc/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"}
+diff --git a/vendor/winapi/.cargo-checksum.json b/vendor/winapi/.cargo-checksum.json
+new file mode 100644
+index 0000000..d4358e7
+--- /dev/null
++++ b/vendor/winapi/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"5c839a674fcd7a98952e593242ea400abe93992746761e38641405d28b00f419"}
+diff --git a/vendor/winapi-i686-pc-windows-gnu/.cargo-checksum.json b/vendor/winapi-i686-pc-windows-gnu/.cargo-checksum.json
+new file mode 100644
+index 0000000..75ac4c5
+--- /dev/null
++++ b/vendor/winapi-i686-pc-windows-gnu/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6"}
+diff --git a/vendor/winapi-x86_64-pc-windows-gnu/.cargo-checksum.json b/vendor/winapi-x86_64-pc-windows-gnu/.cargo-checksum.json
+new file mode 100644
+index 0000000..366bbcb
+--- /dev/null
++++ b/vendor/winapi-x86_64-pc-windows-gnu/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"}

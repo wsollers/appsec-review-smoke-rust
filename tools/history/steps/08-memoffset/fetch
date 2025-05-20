@@ -1,0 +1,2 @@
+https://static.crates.io/crates/memoffset/memoffset-0.5.5.crate|c198b026e1bbf08a937e94c6c60f9ec4a2267f5b0d2eec9c1b21b061ce2be55f|1|vendor/memoffset|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$
+https://static.crates.io/crates/autocfg/autocfg-1.1.0.crate|d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa|1|vendor/autocfg|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$

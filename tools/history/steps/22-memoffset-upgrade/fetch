@@ -1,0 +1,1 @@
+https://static.crates.io/crates/memoffset/memoffset-0.6.2.crate|cc14fc54a812b4472b4113facc3e44d099fbc0ea2ce0551fa5c703f8edfbfd38|1|vendor/memoffset|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$

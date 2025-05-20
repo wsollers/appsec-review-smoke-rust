@@ -1,0 +1,18 @@
+diff --git a/src/server/request.rs b/src/server/request.rs
+index 363c020..8a542dc 100644
+--- a/src/server/request.rs
++++ b/src/server/request.rs
+@@ -43,6 +43,13 @@ fn handle_request(line: &str, stream: &mut TcpStream, session: &mut Session) ->
+     while rest.starts_with(' ') || rest.starts_with('\t') {
+         rest = &rest[1..];
+     }
++    if let Some(after) = rest.strip_prefix("LEN ") {
++        let (declared, tail) = after.split_once(' ').unwrap_or((after, ""));
++        match declared.parse::<usize>() {
++            Ok(n) if n <= line.len() => rest = tail,
++            _ => return 400,
++        }
++    }
+     let rest = rest.trim_end();
+     let (verb, arg) = match rest.split_once(' ') {
+         Some((verb, arg)) => (verb, Some(arg)),

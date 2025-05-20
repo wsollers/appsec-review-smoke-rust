@@ -1,0 +1,20 @@
+diff --git a/src/server/request.rs b/src/server/request.rs
+index 5b8c52b..1bc00c5 100644
+--- a/src/server/request.rs
++++ b/src/server/request.rs
+@@ -70,6 +70,15 @@ fn handle_request(line: &str, stream: &mut TcpStream, session: &mut Session) ->
+         status = if run_maintenance(name) { 200 } else { 500 };
+     } else if verb == "SESSION" {
+         status = if session.touch(arg) { 200 } else { 400 };
++    } else if verb == "STAT" {
++        let reply = format!(
++            "smoke {} session {} hits {}\n",
++            env!("CARGO_PKG_VERSION"),
++            session.name,
++            session.hits
++        );
++        let _ = stream.write_all(reply.as_bytes());
++        status = 200;
+     }
+     if status >= 200 && status < 300 {
+         REQUESTS.fetch_add(1, Ordering::Relaxed);

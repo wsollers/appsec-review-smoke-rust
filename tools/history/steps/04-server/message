@@ -1,0 +1,4 @@
+Add the smoke server with a PING verb
+
+serve_once reads one request line from the accepted connection and
+handle_request dispatches on the verb.

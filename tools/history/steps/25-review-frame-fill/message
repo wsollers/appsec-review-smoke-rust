@@ -1,0 +1,7 @@
+Review the frame_fill copy length report
+
+A scanner flagged the copy_nonoverlapping in frame_fill as an unsafe copy with
+an unbounded length. The length is compared against the destination size and
+the source length on the only path that reaches the copy, so the destination
+cannot overrun: not exploitable, and the copy is unchanged. Documented the
+check in the doc comment so the next reader does not reopen it.

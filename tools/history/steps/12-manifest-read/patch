@@ -1,0 +1,45 @@
+diff --git a/src/server/main.rs b/src/server/main.rs
+index 7796978..d3f4df2 100644
+--- a/src/server/main.rs
++++ b/src/server/main.rs
+@@ -14,6 +14,11 @@ fn main() {
+     let bind = args.next().unwrap_or_else(|| "127.0.0.1:7070".to_string());
+     let mut frame = Frame::new();
+     util::frame_fill(&mut frame, bind.as_bytes(), bind.len());
++    if let Some(name) = args.next() {
++        if let Some(text) = util::read_manifest(&name) {
++            println!("manifest: {} bytes", text.len());
++        }
++    }
+     let listener = match TcpListener::bind(&bind) {
+         Ok(listener) => listener,
+         Err(err) => {
+diff --git a/src/server/util.rs b/src/server/util.rs
+index 0a26718..28c18ff 100644
+--- a/src/server/util.rs
++++ b/src/server/util.rs
+@@ -1,6 +1,10 @@
+ //! Small helpers shared by the smoke server. Deliberately vulnerable smoke target; see README.md.
++use std::fs;
++use std::path::Path;
+ use std::ptr;
+ 
++const MANIFEST_ROOT: &str = "/etc/smoke";
++
+ pub struct Frame {
+     pub data: [u8; 64],
+     pub used: usize,
+@@ -22,3 +26,13 @@ pub fn frame_fill(f: &mut Frame, src: &[u8], n: usize) -> bool {
+     }
+     false
+ }
++
++/// Reads a manifest named on the command line; the path is canonicalised and must
++/// stay under the manifest root.
++pub fn read_manifest(name: &str) -> Option<String> {
++    let path = fs::canonicalize(Path::new(MANIFEST_ROOT).join(name)).ok()?;
++    if !path.starts_with(MANIFEST_ROOT) {
++        return None;
++    }
++    fs::read_to_string(path).ok()
++}

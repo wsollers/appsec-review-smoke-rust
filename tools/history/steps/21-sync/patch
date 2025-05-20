@@ -1,0 +1,33 @@
+diff --git a/src/server/main.rs b/src/server/main.rs
+index 311d293..ef8e71f 100644
+--- a/src/server/main.rs
++++ b/src/server/main.rs
+@@ -20,6 +20,7 @@ fn main() {
+             println!("manifest: {} bytes", text.len());
+         }
+     }
++    util::maintenance_sync();
+     let listener = match TcpListener::bind(&bind) {
+         Ok(listener) => listener,
+         Err(err) => {
+diff --git a/src/server/util.rs b/src/server/util.rs
+index 28c18ff..ab68df3 100644
+--- a/src/server/util.rs
++++ b/src/server/util.rs
+@@ -1,6 +1,7 @@
+ //! Small helpers shared by the smoke server. Deliberately vulnerable smoke target; see README.md.
+ use std::fs;
+ use std::path::Path;
++use std::process::Command;
+ use std::ptr;
+ 
+ const MANIFEST_ROOT: &str = "/etc/smoke";
+@@ -36,3 +37,8 @@ pub fn read_manifest(name: &str) -> Option<String> {
+     }
+     fs::read_to_string(path).ok()
+ }
++
++/// Flushes pending writes before the server starts serving.
++pub fn maintenance_sync() {
++    let _ = Command::new("/bin/sync").status();
++}

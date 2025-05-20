@@ -1,0 +1,62 @@
+diff --git a/src/server/main.rs b/src/server/main.rs
+index cafcac6..7796978 100644
+--- a/src/server/main.rs
++++ b/src/server/main.rs
+@@ -1,14 +1,19 @@
+ //! Entry point of the smoke server: binds one address, accepts one connection and serves it.
+ //! This repository is a deliberately vulnerable smoke target for appsec-review; see README.md.
+ mod request;
++mod util;
+ 
+ use std::env;
+ use std::net::TcpListener;
+ use std::process;
+ 
++use util::Frame;
++
+ fn main() {
+     let mut args = env::args().skip(1);
+     let bind = args.next().unwrap_or_else(|| "127.0.0.1:7070".to_string());
++    let mut frame = Frame::new();
++    util::frame_fill(&mut frame, bind.as_bytes(), bind.len());
+     let listener = match TcpListener::bind(&bind) {
+         Ok(listener) => listener,
+         Err(err) => {
+@@ -16,6 +21,7 @@ fn main() {
+             process::exit(2);
+         }
+     };
++    eprintln!("listening on {} ({} bytes framed)", bind, frame.used);
+     let (stream, _peer) = match listener.accept() {
+         Ok(accepted) => accepted,
+         Err(err) => {
+diff --git a/src/server/util.rs b/src/server/util.rs
+new file mode 100644
+index 0000000..0a26718
+--- /dev/null
++++ b/src/server/util.rs
+@@ -0,0 +1,24 @@
++//! Small helpers shared by the smoke server. Deliberately vulnerable smoke target; see README.md.
++use std::ptr;
++
++pub struct Frame {
++    pub data: [u8; 64],
++    pub used: usize,
++}
++
++impl Frame {
++    /// A frame in its initial state.
++    pub fn new() -> Frame {
++        Frame { data: [0; 64], used: 0 }
++    }
++}
++
++/// Copies up to one frame of payload; longer payloads are refused.
++pub fn frame_fill(f: &mut Frame, src: &[u8], n: usize) -> bool {
++    if n < f.data.len() && n <= src.len() {
++        unsafe { ptr::copy_nonoverlapping(src.as_ptr(), f.data.as_mut_ptr(), n) };
++        f.used = n;
++        return true;
++    }
++    false
++}

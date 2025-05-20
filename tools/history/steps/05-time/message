@@ -1,0 +1,5 @@
+Vendor time 0.1.43 behind the legacy-time feature
+
+Vendored from the published crate with its dependency closure (libc, winapi and
+its two target crates) so the directory source resolves offline. Nothing enables
+the feature yet.

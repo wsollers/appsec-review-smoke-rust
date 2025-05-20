@@ -1,0 +1,39 @@
+diff --git a/src/server/request.rs b/src/server/request.rs
+index b6bed32..5b8c52b 100644
+--- a/src/server/request.rs
++++ b/src/server/request.rs
+@@ -7,6 +7,8 @@ use std::path::Path;
+ use std::process::Command;
+ use std::sync::atomic::{AtomicU32, Ordering};
+ 
++use crate::cache::Session;
++
+ const ASSET_ROOT: &str = "/var/lib/smoke/assets";
+ const TEMPLATE_ROOT: &str = "/var/lib/smoke/templates";
+ 
+@@ -34,7 +36,7 @@ fn run_maintenance(name: &str) -> bool {
+ }
+ 
+ /// Handles one request line and returns an HTTP-like status code.
+-fn handle_request(line: &str, stream: &mut TcpStream) -> u16 {
++fn handle_request(line: &str, stream: &mut TcpStream, session: &mut Session) -> u16 {
+     let rest = line;
+     let rest = rest.trim_end();
+     let (verb, arg) = match rest.split_once(' ') {
+@@ -66,6 +68,8 @@ fn handle_request(line: &str, stream: &mut TcpStream) -> u16 {
+         status = 200;
+     } else if let ("TOOL", Some(name)) = (verb, arg) {
+         status = if run_maintenance(name) { 200 } else { 500 };
++    } else if verb == "SESSION" {
++        status = if session.touch(arg) { 200 } else { 400 };
+     }
+     if status >= 200 && status < 300 {
+         REQUESTS.fetch_add(1, Ordering::Relaxed);
+@@ -83,5 +87,6 @@ pub fn serve_once(mut stream: TcpStream) -> u16 {
+     if reader.read_line(&mut line).unwrap_or(0) == 0 {
+         return 500;
+     }
+-    handle_request(&line, &mut stream)
++    let mut session = Session::open("default");
++    handle_request(&line, &mut stream, &mut session)
+ }

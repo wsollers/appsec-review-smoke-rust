@@ -1,0 +1,30 @@
+diff --git a/src/server/main.rs b/src/server/main.rs
+index ef8e71f..7c70587 100644
+--- a/src/server/main.rs
++++ b/src/server/main.rs
+@@ -1,7 +1,7 @@
+ //! Entry point of the smoke server: binds one address, accepts one connection and serves it.
+ //! This repository is a deliberately vulnerable smoke target for appsec-review; see README.md.
+-mod cache;
+ mod request;
++mod session;
+ mod util;
+ 
+ use std::env;
+diff --git a/src/server/request.rs b/src/server/request.rs
+index 598b402..7f7f094 100644
+--- a/src/server/request.rs
++++ b/src/server/request.rs
+@@ -6,7 +6,7 @@ use std::net::TcpStream;
+ use std::path::Path;
+ use std::sync::atomic::{AtomicU32, Ordering};
+ 
+-use crate::cache::Session;
++use crate::session::Session;
+ 
+ const ASSET_ROOT: &str = "/var/lib/smoke/assets";
+ const TEMPLATE_ROOT: &str = "/var/lib/smoke/templates";
+diff --git a/src/server/cache.rs b/src/server/session.rs
+similarity index 100%
+rename from src/server/cache.rs
+rename to src/server/session.rs

@@ -1,0 +1,44 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index abe9817..9a0389d 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -7,6 +7,7 @@ name = "appsec-review-smoke-rust"
+ version = "0.1.0"
+ dependencies = [
+  "crossbeam-utils",
++ "log",
+  "memoffset",
+  "reqwest",
+  "rusqlite",
+@@ -49,6 +50,12 @@ version = "0.2.155"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
+ 
++[[package]]
++name = "log"
++version = "0.4.22"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
++
+ [[package]]
+ name = "memoffset"
+ version = "0.5.5"
+diff --git a/Cargo.toml b/Cargo.toml
+index e429ac7..cdedda2 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -24,6 +24,7 @@ offsets = ["dep:memoffset"]
+ reqwest = { path = "vendor/reqwest" }
+ rusqlite = { path = "vendor/rusqlite" }
+ serde_json = { path = "vendor/serde_json" }
++log = "=0.4.22"
+ time = { version = "=0.1.43", optional = true }
+ unicode-normalization = { version = "=0.1.9", optional = true }
+ crossbeam-utils = { version = "=0.8.6", optional = true }
+diff --git a/vendor/log/.cargo-checksum.json b/vendor/log/.cargo-checksum.json
+new file mode 100644
+index 0000000..dba76bc
+--- /dev/null
++++ b/vendor/log/.cargo-checksum.json
+@@ -0,0 +1 @@
++{"files":{},"package":"a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"}

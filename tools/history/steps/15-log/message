@@ -1,0 +1,3 @@
+Vendor log 0.4.22
+
+The logging facade for the server; vendored from the published crate.

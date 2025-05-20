@@ -1,0 +1,35 @@
+diff --git a/src/server/request.rs b/src/server/request.rs
+index 4a6b42a..859529a 100644
+--- a/src/server/request.rs
++++ b/src/server/request.rs
+@@ -8,9 +8,15 @@ use std::process::Command;
+ use std::sync::atomic::{AtomicU32, Ordering};
+ 
+ const ASSET_ROOT: &str = "/var/lib/smoke/assets";
++const TEMPLATE_ROOT: &str = "/var/lib/smoke/templates";
+ 
+ static REQUESTS: AtomicU32 = AtomicU32::new(0);
+ 
++/// Serves a template named by the request; returns its bytes or None.
++fn serve_file(name: &str) -> Option<Vec<u8>> {
++    fs::read(Path::new(TEMPLATE_ROOT).join(name)).ok()
++}
++
+ /// Reads an asset named by the request; returns its text or None.
+ fn read_asset(name: &str) -> Option<String> {
+     fs::read_to_string(Path::new(ASSET_ROOT).join(name)).ok()
+@@ -39,6 +45,14 @@ fn handle_request(line: &str, stream: &mut TcpStream) -> u16 {
+     if verb == "PING" {
+         let _ = stream.write_all(b"PONG\n");
+         status = 200;
++    } else if let ("GET", Some(name)) = (verb, arg) {
++        status = match serve_file(name) {
++            Some(body) => {
++                let _ = stream.write_all(&body);
++                200
++            }
++            None => 404,
++        };
+     } else if let ("ASSET", Some(name)) = (verb, arg) {
+         status = match read_asset(name) {
+             Some(text) => {

@@ -1,0 +1,21 @@
+diff --git a/src/server/session.rs b/src/server/session.rs
+index e1a3c6a..05a4b8a 100644
+--- a/src/server/session.rs
++++ b/src/server/session.rs
+@@ -1,5 +1,6 @@
+ //! Per-connection session state for the smoke server. Deliberately vulnerable smoke target;
+ //! see README.md.
++use rusqlite::Connection;
+ 
+ const PAGE: usize = 4096;
+ 
+@@ -12,6 +13,9 @@ pub struct Session {
+ impl Session {
+     /// Opens a session; the name is truncated to 32 bytes.
+     pub fn open(name: &str) -> Session {
++        if let Ok(conn) = Connection::open_in_memory() {
++            let _ = conn.execute("DELETE FROM sessions WHERE expired = 1", ());
++        }
+         let mut name = name.to_string();
+         name.truncate(32);
+         Session { name, hits: 0, scratch: Vec::new() }

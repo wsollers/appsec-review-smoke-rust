@@ -1,0 +1,1 @@
+https://static.crates.io/crates/log/log-0.4.22.crate|a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24|1|vendor/log|^(Cargo\.toml|[^/]+\.rs|src/.*|LICENSE[^/]*|COPYRIGHT|README[^/]*)$

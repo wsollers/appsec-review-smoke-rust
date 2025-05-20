@@ -1,0 +1,5 @@
+Vendor offline stand-ins for reqwest, rusqlite and serde_json
+
+Path crates under vendor/ with the API surface the fixture program uses; the
+cargo config replaces crates.io with the vendor directory so builds are offline,
+and each stand-in carries the checksum file that a directory source requires.

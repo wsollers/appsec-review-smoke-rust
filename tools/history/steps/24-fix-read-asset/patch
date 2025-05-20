@@ -1,0 +1,28 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 1cbba97..d98f7e5 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -14,3 +14,4 @@ All notable changes to this project are documented in this file. The format foll
+ 
+ - 2026-02-19: Upgraded memoffset from 0.5.5 to 0.6.2 (RUSTSEC-2023-0045, GHSA-wfg4-322g-9vqv; `offset_of!` could invoke undefined behaviour).
+ - 2026-03-06: Fixed command injection in `run_maintenance` (CWE-78); tool names are now matched against a fixed list.
++- 2026-03-16: Fixed path traversal in `read_asset` (CWE-22); paths are canonicalised and confined to the asset root.
+diff --git a/src/server/request.rs b/src/server/request.rs
+index b575abd..598b402 100644
+--- a/src/server/request.rs
++++ b/src/server/request.rs
+@@ -19,8 +19,13 @@ fn serve_file(name: &str) -> Option<Vec<u8>> {
+ }
+ 
+ /// Reads an asset named by the request; returns its text or None.
++/// The joined path is canonicalised and must stay under the asset root.
+ fn read_asset(name: &str) -> Option<String> {
+-    fs::read_to_string(Path::new(ASSET_ROOT).join(name)).ok()
++    let path = fs::canonicalize(Path::new(ASSET_ROOT).join(name)).ok()?;
++    if !path.starts_with(ASSET_ROOT) {
++        return None;
++    }
++    fs::read_to_string(path).ok()
+ }
+ 
+ /// Runs one of the two maintenance tools; any other name is refused.
