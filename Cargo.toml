@@ -1,0 +1,15 @@
+[package]
+name = "appsec-review-smoke-rust"
+version = "0.1.0"
+edition = "2021"
+publish = false
+autobins = false
+
+[[bin]]
+name = "rust-synthetic"
+path = "src/main.rs"
+
+[dependencies]
+reqwest = { path = "vendor/reqwest" }
+rusqlite = { path = "vendor/rusqlite" }
+serde_json = { path = "vendor/serde_json" }
