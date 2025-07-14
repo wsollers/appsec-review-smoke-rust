@@ -13,7 +13,12 @@ path = "src/main.rs"
 name = "smoke-server"
 path = "src/server/main.rs"
 
+# Optional features; none is enabled by default and the binaries use none of them.
+[features]
+legacy-time = ["dep:time"]
+
 [dependencies]
 reqwest = { path = "vendor/reqwest" }
 rusqlite = { path = "vendor/rusqlite" }
 serde_json = { path = "vendor/serde_json" }
+time = { version = "=0.1.43", optional = true }
