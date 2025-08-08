@@ -17,6 +17,7 @@ path = "src/server/main.rs"
 [features]
 legacy-time = ["dep:time"]
 normalize = ["dep:unicode-normalization"]
+threads = ["dep:crossbeam-utils"]
 
 [dependencies]
 reqwest = { path = "vendor/reqwest" }
@@ -24,3 +25,4 @@ rusqlite = { path = "vendor/rusqlite" }
 serde_json = { path = "vendor/serde_json" }
 time = { version = "=0.1.43", optional = true }
 unicode-normalization = { version = "=0.1.9", optional = true }
+crossbeam-utils = { version = "=0.8.6", optional = true }
