@@ -7,12 +7,19 @@ name = "appsec-review-smoke-rust"
 version = "0.1.0"
 dependencies = [
  "crossbeam-utils",
+ "memoffset",
  "reqwest",
  "rusqlite",
  "serde_json",
  "time",
  "unicode-normalization",
 ]
+
+[[package]]
+name = "autocfg"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "cfg-if"
@@ -41,6 +48,15 @@ name = "libc"
 version = "0.2.155"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
+
+[[package]]
+name = "memoffset"
+version = "0.5.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c198b026e1bbf08a937e94c6c60f9ec4a2267f5b0d2eec9c1b21b061ce2be55f"
+dependencies = [
+ "autocfg",
+]
 
 [[package]]
 name = "reqwest"
