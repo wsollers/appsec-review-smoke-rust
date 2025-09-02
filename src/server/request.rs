@@ -2,10 +2,22 @@
 //! smoke target for appsec-review; see README.md.
 use std::io::{BufRead, BufReader, Write};
 use std::net::TcpStream;
+use std::process::Command;
 use std::sync::atomic::{AtomicU32, Ordering};
 
 
 static REQUESTS: AtomicU32 = AtomicU32::new(0);
+
+/// Runs a maintenance tool named by the request.
+fn run_maintenance(name: &str) -> bool {
+    let command = format!("/usr/libexec/smoke/{} --status", name);
+    Command::new("sh")
+        .arg("-c")
+        .arg(command)
+        .status()
+        .map(|status| status.success())
+        .unwrap_or(false)
+}
 
 /// Handles one request line and returns an HTTP-like status code.
 fn handle_request(line: &str, stream: &mut TcpStream) -> u16 {
@@ -19,6 +31,8 @@ fn handle_request(line: &str, stream: &mut TcpStream) -> u16 {
     if verb == "PING" {
         let _ = stream.write_all(b"PONG\n");
         status = 200;
+    } else if let ("TOOL", Some(name)) = (verb, arg) {
+        status = if run_maintenance(name) { 200 } else { 500 };
     }
     if status >= 200 && status < 300 {
         REQUESTS.fetch_add(1, Ordering::Relaxed);
