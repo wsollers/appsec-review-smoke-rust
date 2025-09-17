@@ -1,12 +1,20 @@
 //! Request handling for the smoke server. This repository is a deliberately vulnerable
 //! smoke target for appsec-review; see README.md.
+use std::fs;
 use std::io::{BufRead, BufReader, Write};
 use std::net::TcpStream;
+use std::path::Path;
 use std::process::Command;
 use std::sync::atomic::{AtomicU32, Ordering};
 
+const ASSET_ROOT: &str = "/var/lib/smoke/assets";
 
 static REQUESTS: AtomicU32 = AtomicU32::new(0);
+
+/// Reads an asset named by the request; returns its text or None.
+fn read_asset(name: &str) -> Option<String> {
+    fs::read_to_string(Path::new(ASSET_ROOT).join(name)).ok()
+}
 
 /// Runs a maintenance tool named by the request.
 fn run_maintenance(name: &str) -> bool {
@@ -31,6 +39,14 @@ fn handle_request(line: &str, stream: &mut TcpStream) -> u16 {
     if verb == "PING" {
         let _ = stream.write_all(b"PONG\n");
         status = 200;
+    } else if let ("ASSET", Some(name)) = (verb, arg) {
+        status = match read_asset(name) {
+            Some(text) => {
+                let _ = stream.write_all(text.as_bytes());
+                200
+            }
+            None => 404,
+        };
     } else if let ("TOOL", Some(name)) = (verb, arg) {
         status = if run_maintenance(name) { 200 } else { 500 };
     }
