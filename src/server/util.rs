@@ -1,5 +1,9 @@
 //! Small helpers shared by the smoke server. Deliberately vulnerable smoke target; see README.md.
+use std::fs;
+use std::path::Path;
 use std::ptr;
+
+const MANIFEST_ROOT: &str = "/etc/smoke";
 
 pub struct Frame {
     pub data: [u8; 64],
@@ -21,4 +25,14 @@ pub fn frame_fill(f: &mut Frame, src: &[u8], n: usize) -> bool {
         return true;
     }
     false
+}
+
+/// Reads a manifest named on the command line; the path is canonicalised and must
+/// stay under the manifest root.
+pub fn read_manifest(name: &str) -> Option<String> {
+    let path = fs::canonicalize(Path::new(MANIFEST_ROOT).join(name)).ok()?;
+    if !path.starts_with(MANIFEST_ROOT) {
+        return None;
+    }
+    fs::read_to_string(path).ok()
 }

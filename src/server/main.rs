@@ -14,6 +14,11 @@ fn main() {
     let bind = args.next().unwrap_or_else(|| "127.0.0.1:7070".to_string());
     let mut frame = Frame::new();
     util::frame_fill(&mut frame, bind.as_bytes(), bind.len());
+    if let Some(name) = args.next() {
+        if let Some(text) = util::read_manifest(&name) {
+            println!("manifest: {} bytes", text.len());
+        }
+    }
     let listener = match TcpListener::bind(&bind) {
         Ok(listener) => listener,
         Err(err) => {
