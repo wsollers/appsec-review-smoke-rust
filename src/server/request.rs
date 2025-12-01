@@ -61,6 +61,9 @@ fn handle_request(line: &str, stream: &mut TcpStream) -> u16 {
             }
             None => 404,
         };
+    } else if let ("LOG", Some(text)) = (verb, arg) {
+        log::info!("client: {}", text);
+        status = 200;
     } else if let ("TOOL", Some(name)) = (verb, arg) {
         status = if run_maintenance(name) { 200 } else { 500 };
     }
