@@ -1,6 +1,7 @@
 //! Small helpers shared by the smoke server. Deliberately vulnerable smoke target; see README.md.
 use std::fs;
 use std::path::Path;
+use std::process::Command;
 use std::ptr;
 
 const MANIFEST_ROOT: &str = "/etc/smoke";
@@ -35,4 +36,9 @@ pub fn read_manifest(name: &str) -> Option<String> {
         return None;
     }
     fs::read_to_string(path).ok()
+}
+
+/// Flushes pending writes before the server starts serving.
+pub fn maintenance_sync() {
+    let _ = Command::new("/bin/sync").status();
 }

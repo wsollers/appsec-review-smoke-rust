@@ -20,6 +20,7 @@ fn main() {
             println!("manifest: {} bytes", text.len());
         }
     }
+    util::maintenance_sync();
     let listener = match TcpListener::bind(&bind) {
         Ok(listener) => listener,
         Err(err) => {
