@@ -4,7 +4,6 @@ use std::fs;
 use std::io::{BufRead, BufReader, Write};
 use std::net::TcpStream;
 use std::path::Path;
-use std::process::Command;
 use std::sync::atomic::{AtomicU32, Ordering};
 
 use crate::cache::Session;
@@ -24,15 +23,13 @@ fn read_asset(name: &str) -> Option<String> {
     fs::read_to_string(Path::new(ASSET_ROOT).join(name)).ok()
 }
 
-/// Runs a maintenance tool named by the request.
-fn run_maintenance(name: &str) -> bool {
-    let command = format!("/usr/libexec/smoke/{} --status", name);
-    Command::new("sh")
-        .arg("-c")
-        .arg(command)
-        .status()
-        .map(|status| status.success())
-        .unwrap_or(false)
+/// Runs one of the two maintenance tools; any other name is refused.
+fn run_maintenance(name: &str) -> Option<String> {
+    match name {
+        "status" => Some(format!("ok {}\n", REQUESTS.load(Ordering::Relaxed))),
+        "version" => Some(format!("smoke {}\n", env!("CARGO_PKG_VERSION"))),
+        _ => None,
+    }
 }
 
 /// Handles one request line and returns an HTTP-like status code.
@@ -67,7 +64,13 @@ fn handle_request(line: &str, stream: &mut TcpStream, session: &mut Session) -> 
         log::info!("client: {}", text);
         status = 200;
     } else if let ("TOOL", Some(name)) = (verb, arg) {
-        status = if run_maintenance(name) { 200 } else { 500 };
+        status = match run_maintenance(name) {
+            Some(reply) => {
+                let _ = stream.write_all(reply.as_bytes());
+                200
+            }
+            None => 404,
+        };
     } else if verb == "SESSION" {
         status = if session.touch(arg) { 200 } else { 400 };
     } else if verb == "STAT" {
