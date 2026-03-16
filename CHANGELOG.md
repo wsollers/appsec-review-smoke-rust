@@ -14,3 +14,4 @@ All notable changes to this project are documented in this file. The format foll
 
 - 2026-02-19: Upgraded memoffset from 0.5.5 to 0.6.2 (RUSTSEC-2023-0045, GHSA-wfg4-322g-9vqv; `offset_of!` could invoke undefined behaviour).
 - 2026-03-06: Fixed command injection in `run_maintenance` (CWE-78); tool names are now matched against a fixed list.
+- 2026-03-16: Fixed path traversal in `read_asset` (CWE-22); paths are canonicalised and confined to the asset root.

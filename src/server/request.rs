@@ -19,8 +19,13 @@ fn serve_file(name: &str) -> Option<Vec<u8>> {
 }
 
 /// Reads an asset named by the request; returns its text or None.
+/// The joined path is canonicalised and must stay under the asset root.
 fn read_asset(name: &str) -> Option<String> {
-    fs::read_to_string(Path::new(ASSET_ROOT).join(name)).ok()
+    let path = fs::canonicalize(Path::new(ASSET_ROOT).join(name)).ok()?;
+    if !path.starts_with(ASSET_ROOT) {
+        return None;
+    }
+    fs::read_to_string(path).ok()
 }
 
 /// Runs one of the two maintenance tools; any other name is refused.
