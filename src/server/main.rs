@@ -1,7 +1,7 @@
 //! Entry point of the smoke server: binds one address, accepts one connection and serves it.
 //! This repository is a deliberately vulnerable smoke target for appsec-review; see README.md.
-mod cache;
 mod request;
+mod session;
 mod util;
 
 use std::env;

@@ -6,7 +6,7 @@ use std::net::TcpStream;
 use std::path::Path;
 use std::sync::atomic::{AtomicU32, Ordering};
 
-use crate::cache::Session;
+use crate::session::Session;
 
 const ASSET_ROOT: &str = "/var/lib/smoke/assets";
 const TEMPLATE_ROOT: &str = "/var/lib/smoke/templates";
