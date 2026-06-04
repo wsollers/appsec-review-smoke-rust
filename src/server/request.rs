@@ -91,6 +91,8 @@ fn handle_request(line: &str, stream: &mut TcpStream, session: &mut Session) -> 
     if status >= 200 && status < 300 {
         REQUESTS.fetch_add(1, Ordering::Relaxed);
     }
+    let trailer = format!("{} X-Count: {}\n", status, REQUESTS.load(Ordering::Relaxed));
+    let _ = stream.write_all(trailer.as_bytes());
     status
 }
 
