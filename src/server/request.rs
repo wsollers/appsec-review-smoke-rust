@@ -39,7 +39,10 @@ fn run_maintenance(name: &str) -> Option<String> {
 
 /// Handles one request line and returns an HTTP-like status code.
 fn handle_request(line: &str, stream: &mut TcpStream, session: &mut Session) -> u16 {
-    let rest = line;
+    let mut rest = line;
+    while rest.starts_with(' ') || rest.starts_with('\t') {
+        rest = &rest[1..];
+    }
     let rest = rest.trim_end();
     let (verb, arg) = match rest.split_once(' ') {
         Some((verb, arg)) => (verb, Some(arg)),
